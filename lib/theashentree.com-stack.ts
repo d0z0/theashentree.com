@@ -12,12 +12,12 @@ export class TheashentreeComStack extends cdk.Stack {
   constructor(scope: cdk.App, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
-    const hostedZone = route53.HostedZone.fromLookup(this, 'raceteamtv.com', {domainName: 'raceteamtv.com'})
+    const hostedZone = route53.HostedZone.fromLookup(this, 'theashentree.com', {domainName: 'theashentree.com'})
 
     const acmCertificate = new acm.DnsValidatedCertificate(this, 'Certificate', {
-      domainName: '*.raceteamtv.com',
+      domainName: '*.theashentree.com',
       hostedZone: hostedZone,
-      subjectAlternativeNames: ['raceteamtv.com']
+      subjectAlternativeNames: ['theashentree.com']
     });
 
     const s3Bucket = new s3.Bucket(this, 'StaticWebsite', {
@@ -39,7 +39,7 @@ export class TheashentreeComStack extends cdk.Stack {
     const distribution = new cloudfront.CloudFrontWebDistribution(this, 'Distribution', {
       comment: 'CDK Cloudfront Secure S3',
       viewerCertificate: cloudfront.ViewerCertificate.fromAcmCertificate(acmCertificate, {
-        aliases: ['raceteamtv.com', 'www.raceteamtv.com'],
+        aliases: ['theashentree.com', 'www.theashentree.com'],
       }),
       defaultRootObject: 'index.html',
       viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
@@ -66,7 +66,7 @@ export class TheashentreeComStack extends cdk.Stack {
       destinationBucket: s3Bucket,
     });
 
-    ['raceteamtv.com', 'www.raceteamtv.com'].forEach(domain => {
+    ['theashentree.com', 'www.theashentree.com'].forEach(domain => {
       new route53.AaaaRecord(this, `AAA Record for ${domain}`, {
         zone: hostedZone,
         recordName: domain,
