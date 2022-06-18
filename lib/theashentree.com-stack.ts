@@ -36,14 +36,12 @@ export class TheashentreeComStack extends cdk.Stack {
     cloudfrontUserAccessPolicy.addResources(s3Bucket.arnForObjects('*'));
     s3Bucket.addToResourcePolicy(cloudfrontUserAccessPolicy);
 
-    const ROOT_INDEX_FILE = 'index.html';
-    const PROD_FOLDER = 'production';
     const distribution = new cloudfront.CloudFrontWebDistribution(this, 'Distribution', {
       comment: 'CDK Cloudfront Secure S3',
       viewerCertificate: cloudfront.ViewerCertificate.fromAcmCertificate(acmCertificate, {
         aliases: ['raceteamtv.com', 'www.raceteamtv.com'],
       }),
-      defaultRootObject: ROOT_INDEX_FILE,
+      defaultRootObject: 'index.html',
       viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
       httpVersion: cloudfront.HttpVersion.HTTP2,
       priceClass: cloudfront.PriceClass.PRICE_CLASS_100, // the cheapest
@@ -52,7 +50,6 @@ export class TheashentreeComStack extends cdk.Stack {
           s3OriginSource: {
             originAccessIdentity: accessIdentity,
             s3BucketSource: s3Bucket,
-            // originPath: `/${PROD_FOLDER}`,
           },
           behaviors: [
             {
@@ -62,24 +59,8 @@ export class TheashentreeComStack extends cdk.Stack {
           ],
         },
       ],
-      // Allows React to handle all errors internally
-      // errorConfigurations: [
-      //   {
-      //     errorCachingMinTtl: 300, // in seconds
-      //     errorCode: 403,
-      //     responseCode: 200,
-      //     responsePagePath: `/${ROOT_INDEX_FILE}`,
-      //   },
-      //   {
-      //     errorCachingMinTtl: 300, // in seconds
-      //     errorCode: 404,
-      //     responseCode: 200,
-      //     responsePagePath: `/${ROOT_INDEX_FILE}`,
-      //   },
-      // ],
     });
 
-  
     const deployment = new s3Deployment.BucketDeployment(this, 'SiteDeployment', {
       sources: [s3Deployment.Source.asset('./website')],
       destinationBucket: s3Bucket,
@@ -88,11 +69,13 @@ export class TheashentreeComStack extends cdk.Stack {
     ['raceteamtv.com', 'www.raceteamtv.com'].forEach(domain => {
       new route53.AaaaRecord(this, `AAA Record for ${domain}`, {
         zone: hostedZone,
+        recordName: domain,
         target: route53.RecordTarget.fromAlias(new targets.CloudFrontTarget(distribution))
       });
   
       new route53.ARecord(this, `A Record for ${domain}`, {
         zone: hostedZone,
+        recordName: domain,
         target: route53.RecordTarget.fromAlias(new targets.CloudFrontTarget(distribution))
       });
     });
