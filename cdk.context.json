@@ -1,0 +1,14 @@
+{
+  "hosted-zone:account=127674040529:domainName=theashentree.com:region=eu-north-1": {
+    "Id": "/hostedzone/Z3TY5V1DFOHPIS",
+    "Name": "theashentree.com."
+  },
+  "hosted-zone:account=127674040529:domainName=raceteamtv.com:region=eu-north-1": {
+    "Id": "/hostedzone/Z00526411O5RWSNOJO0CH",
+    "Name": "raceteamtv.com."
+  },
+  "hosted-zone:account=127674040529:domainName=raceteamtv.com:region=us-east-1": {
+    "Id": "/hostedzone/Z00526411O5RWSNOJO0CH",
+    "Name": "raceteamtv.com."
+  }
+}
