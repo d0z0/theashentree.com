@@ -1,9 +1,35 @@
-*.js
-!jest.config.js
-*.d.ts
-node_modules
+# Local .terraform directories
+**/.terraform/*
 
-# CDK asset staging directory
-.cdk.staging
-cdk.out
-cdk.context.json
+# Terraform state files
+*.tfstate
+*.tfstate.*
+
+# Crash log files
+crash.log
+crash.*.log
+
+# Terraform variable override files (can contain sensitive data)
+*.tfvars
+*.tfvars.json
+
+# Terraform plan files
+*.tfplan
+
+# Ignore CLI configuration files
+.terraformrc
+terraform.rc
+
+# Ignore backup files created by Terraform
+*.backup
+
+# IDE/editor-specific files (optional)
+.vscode/
+.idea/
+*.swp
+*.swo
+*.bak
+*~
+
+# MacOS metadata files
+.DS_Store
